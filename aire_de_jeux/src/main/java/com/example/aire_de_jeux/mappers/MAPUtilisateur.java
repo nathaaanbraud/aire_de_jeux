@@ -1,7 +1,7 @@
-package com.example.aire_de_jeux.mapper;
+package com.example.aire_de_jeux.mappers;
 
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
-import com.example.aire_de_jeux.models.Utilisateur;
+import com.example.aire_de_jeux.entities.Utilisateur;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

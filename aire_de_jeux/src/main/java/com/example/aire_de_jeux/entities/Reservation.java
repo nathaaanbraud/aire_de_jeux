@@ -1,4 +1,4 @@
-package com.example.aire_de_jeux.models;
+package com.example.aire_de_jeux.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
