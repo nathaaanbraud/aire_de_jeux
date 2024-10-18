@@ -24,4 +24,6 @@ public class CTRReservation {
         // TODO: Implement this method
         return new ArrayList<>();
     }
+
+    // TODO: Récupération par liste, unitaire, création, modification, suppression (valable pour tous les contrôleurs)
 }
