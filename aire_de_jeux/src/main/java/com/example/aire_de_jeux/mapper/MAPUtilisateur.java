@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface MAPUtilisateur {
-    MAPUtilisateur INSTANCE = Mappers.getMapper(MAPUtilisateur.class);
+
     DTOUtilisateur toDTO(Utilisateur utilisateur);
     Utilisateur toEntity(DTOUtilisateur dtoUtilisateur);
 }
