@@ -8,8 +8,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface MAPUtilisateur {
     MAPUtilisateur INSTANCE = Mappers.getMapper(MAPUtilisateur.class);
-
     DTOUtilisateurCreation toDTO(Utilisateur utilisateur);
-
     Utilisateur toEntity(DTOUtilisateurCreation dtoUtilisateurCreation);
 }

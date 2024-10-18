@@ -7,8 +7,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface MAPReservation {
     MAPReservation INSTANCE = Mappers.getMapper(MAPReservation.class);
-
     DTOReservation toDTO(Reservation reservation);
-
     Reservation toEntity(DTOReservation dtoReservation);
 }
