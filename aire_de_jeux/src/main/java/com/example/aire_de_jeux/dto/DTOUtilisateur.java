@@ -1,4 +1,6 @@
 package com.example.aire_de_jeux.dto;
+
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,5 +14,7 @@ public class DTOUtilisateur {
     private String prenom;
     private String mail;
     private String username;
-    // On ne met volontairement pas le mot depasse, pour des enjeux de sécurité.
+    // 2 options ; on laisse l'attribut mdp (notre choix) tout en faisant en sorte que lors de l'échange service vers dto, on envoie un mdp null
+    // soit on crée une deuxiemes DTO qui ne contiendrait pas d'attribut mdp
+    private String password;
 }
