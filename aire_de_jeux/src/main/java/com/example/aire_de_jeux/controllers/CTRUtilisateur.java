@@ -14,9 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/utilisateurs")
 public class CTRUtilisateur {
-
-
-
+    /*
     @GetMapping  // Correction de l'annotation
     public ResponseEntity<List<DTOUtilisateur>> getAllUtilisateurs() {
         //TODO
@@ -56,5 +54,5 @@ public class CTRUtilisateur {
         //TODO
         return null;
     }
-
+    */
 }

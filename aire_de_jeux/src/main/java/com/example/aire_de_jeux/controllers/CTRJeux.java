@@ -12,6 +12,7 @@ import lombok.*;
 @RestController
 @RequestMapping("/api/jeux")
 public class CTRJeux {
+    /*
     @Autowired
     private REPJeux REPJeux;
     // Modifier un jeu
@@ -35,14 +36,12 @@ public class CTRJeux {
         }
     }
 
-    /*
     // Ajouter un jeu
     @PostMapping
     public ResponseEntity<Jeux> addUtilisateur(@RequestBody Jeux jeu) {
         Jeux newJeu = REPJeux.save(jeu);
         return ResponseEntity.ok(newJeu);
     }
-    */
 
     @DeleteMapping("/deleteJeux/{id}")
     public ResponseEntity<String> deleteJeux(@PathVariable Integer id) {
@@ -55,5 +54,6 @@ public class CTRJeux {
             return new ResponseEntity<>("Jeu avec l'ID " + id + " n'a pas été trouvé.", HttpStatus.NOT_FOUND);
         }
     }
+    */
 }
 
