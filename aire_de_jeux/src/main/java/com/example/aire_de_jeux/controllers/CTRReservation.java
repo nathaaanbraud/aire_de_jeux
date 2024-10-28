@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservations")
+@RequestMapping("/api/reservations")
 public class CTRReservation {
-
+    /*
     @PostMapping
     public void addReservation(@RequestBody String reservation) {
         // TODO: Implement this method
@@ -45,4 +45,5 @@ public class CTRReservation {
     }
 
     // TODO: Récupération par liste, unitaire, création, modification, suppression (valable pour tous les contrôleurs)
+    */
 }

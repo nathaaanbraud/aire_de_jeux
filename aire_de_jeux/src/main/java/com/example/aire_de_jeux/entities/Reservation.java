@@ -4,32 +4,29 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Builder
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Table(name = "reservation")
 public class Reservation {
 
-    @Id
-    @Column(name = "utilisateur_id")
-    private Integer utilisateurId;
-
-    @Id
-    @Column(name = "jeux_id")
-    private Integer jeuxId;
+    @EmbeddedId
+    private ReservationId id;
 
     @Column(nullable = false)
     private Integer reservation;
 
     // Clé étrangère vers Utilisateur
     @ManyToOne
+    @MapsId("utilisateurId")  // on va associer l'ID utilisateur de ReservationId
     @JoinColumn(name = "utilisateur_id", insertable = false, updatable = false)
     private Utilisateur utilisateur;
 
     // Clé étrangère vers Jeux
     @ManyToOne
+    @MapsId("jeuxId")  // Pareil pour l'ID jeu de ReservationId
     @JoinColumn(name = "jeux_id", insertable = false, updatable = false)
     private Jeux jeux;
 }
