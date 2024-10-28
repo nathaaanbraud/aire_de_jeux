@@ -27,4 +27,6 @@ public class Jeux {
 
     @Column(name = "point_geo", nullable = false, length = 100)
     private String pointGeo;
+
+
 }
