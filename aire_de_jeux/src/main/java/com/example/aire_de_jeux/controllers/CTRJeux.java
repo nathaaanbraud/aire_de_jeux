@@ -33,8 +33,6 @@ public class CTRJeux {
         return ResponseEntity.ok(newdtoJeux);
     }
 
-
-
     @DeleteMapping("/deleteJeux/{id}")
     public ResponseEntity<Void> deleteJeux(@PathVariable Integer id) {
         boolean isDeleted = SERJeux.deleteJeux(id);
