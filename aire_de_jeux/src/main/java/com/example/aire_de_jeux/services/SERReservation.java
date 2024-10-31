@@ -33,6 +33,19 @@ public class SERReservation {
         return repReservation.findById(id).map(mapReservation::toDTO);
     }
 
+    //Récupération de toutes les reservations correspondantes à un utilisateur
+    public List<DTOReservation> getReservationByUtilisateur(Integer id) {
+        return repReservation.findByUtilisateurId(id).stream()
+                .map(mapReservation::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List <DTOReservation> getReservationByJeux(Integer id) {
+        return repReservation.findByJeuxId(id).stream()
+                .map(mapReservation::toDTO)
+                .collect(Collectors.toList());
+    }
+
     // Récupération de toutes les réservations
     public List<DTOReservation> getAllReservations() {
         return repReservation.findAll().stream()

@@ -17,17 +17,32 @@ import java.util.Optional;
 @RequestMapping("/api/utilisateurs")
 public class CTRUtilisateur {
     private SERUtilisateur SERUtil;
-    @GetMapping  // Correction de l'annotation
-    public ResponseEntity<List<DTOUtilisateur>> getAllUtilisateurs() {
-        //TODO
-        return null;
+
+
+    //recuperer tous les utilisateurs
+    @GetMapping
+    public List<DTOUtilisateur> getAllUtilisateur() {
+        List<DTOUtilisateur> listeUtilisateurs = SERUtil.getAllUtilisateur();
+        return listeUtilisateurs;
     }
 
+    //recuperer un utilisateur par son id
     @GetMapping("/{id}")
-    public ResponseEntity<DTOUtilisateur> getUtilisateurById(@PathVariable Long id) {
-        //TODO
-        return null;
+    public ResponseEntity<DTOUtilisateur> getUtilisateurById(@PathVariable Integer id) {
+        Optional<DTOUtilisateur> utilisateur = SERUtil.getUtilisateurById(id);
+        return utilisateur
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    //recuperer l'utilsateur pas son nom
+    @GetMapping("/nom/{nom}")
+    public List<DTOUtilisateur> getUtilisateurByNom(@PathVariable String nom) {
+        List<DTOUtilisateur> listeUtilisateurs = SERUtil.getUtilisateurByNom(nom);
+        return listeUtilisateurs;
+    }
+
+
+
 
     @PostMapping
     public ResponseEntity<DTOUtilisateur> createUtilisateur(@RequestBody DTOUtilisateur dtoUtilisateur) {
@@ -54,15 +69,8 @@ public class CTRUtilisateur {
         }
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<DTOUtilisateur>> searchUtilisateur(@RequestParam String nom) {
-        //TODO
-        return null;
-    }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<DTOUtilisateur>> searchUtilisateur(@RequestParam String nom, @RequestParam String prenom) {
-        //TODO
-        return null;
-    }
+
+
+
 }

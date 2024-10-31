@@ -32,6 +32,13 @@ public class SERUtilisateur {
         return repUtilisateur.findById(id).map(mapUtilisateur::toDTO);
     }
 
+    // Récupération par nom
+    public List<DTOUtilisateur> getUtilisateurByNom(String nom) {
+        return repUtilisateur.findByNom(nom).stream()
+                .map(mapUtilisateur::toDTO)
+                .collect(Collectors.toList());
+    }
+
     // Récupération par liste
     public List<DTOUtilisateur> getAllUtilisateur() {
         return repUtilisateur.findAll().stream()
