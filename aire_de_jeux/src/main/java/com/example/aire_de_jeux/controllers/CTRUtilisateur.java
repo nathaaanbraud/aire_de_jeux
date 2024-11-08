@@ -45,7 +45,6 @@ public class CTRUtilisateur {
 
     @PostMapping
     public ResponseEntity<DTOUtilisateur> createUtilisateur(@RequestBody DTOUtilisateur dtoUtilisateur) {
-        System.out.println("je suis dans le controller");
         DTOUtilisateur nouvelUtilisateur = SERUtil.createUtilisateur(dtoUtilisateur);
         return ResponseEntity.ok(nouvelUtilisateur);
     }
