@@ -1,21 +1,24 @@
 package com.example.aire_de_jeux.controllers;
+
 import com.example.aire_de_jeux.dto.DTOJeux;
-import com.example.aire_de_jeux.repositories.*;
-import com.example.aire_de_jeux.services.*;
-import com.example.aire_de_jeux.entities.Jeux;
+import com.example.aire_de_jeux.repositories.REPJeux;
+import com.example.aire_de_jeux.services.SERJeux;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
-import lombok.*;
 
 @RestController
 @RequestMapping("/api/jeux")
 public class CTRJeux {
+
     @Autowired
     private REPJeux REPJeux;
-    private SERJeux SERJeux;
+
+    @Autowired // Ajoutez cette annotation
+    private SERJeux SERJeux; // Assurez-vous que SERJeux est également un service Spring
+
     // Modifier un jeu
     @PutMapping("/{id}")
     public ResponseEntity<DTOJeux> setJeux(@PathVariable Integer id, @RequestBody DTOJeux dtoJeux) {
@@ -44,5 +47,12 @@ public class CTRJeux {
         }
     }
 
-}
+    @GetMapping("/{id}")
+    public ResponseEntity<DTOJeux> getJeuxById(@PathVariable Integer id) {
+        Optional<DTOJeux> jeux = SERJeux.getJeuxById(id);
+        return jeux
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
+    }
+}
