@@ -58,7 +58,7 @@ public class CTRUtilisateur {
                 .orElseGet(() -> ResponseEntity.notFound().build()); // Sinon, retourne 404 Not Found
     }
 
-    @DeleteMapping("/deleteUtilisateur/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUtilisateur(@PathVariable Integer id) {
         boolean isDeleted = SERUtil.deleteUtilisateur(id);
 
