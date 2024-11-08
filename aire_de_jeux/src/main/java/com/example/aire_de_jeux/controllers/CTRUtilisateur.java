@@ -5,6 +5,7 @@ import com.example.aire_de_jeux.dto.DTOUtilisateur;
 import com.example.aire_de_jeux.mappers.MAPUtilisateur;
 import com.example.aire_de_jeux.entities.Utilisateur;
 import com.example.aire_de_jeux.services.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
+@RequiredArgsConstructor
 public class CTRUtilisateur {
-    private SERUtilisateur SERUtil;
 
+    final private SERUtilisateur SERUtil;
 
     //recuperer tous les utilisateurs
     @GetMapping
@@ -46,6 +48,7 @@ public class CTRUtilisateur {
 
     @PostMapping
     public ResponseEntity<DTOUtilisateur> createUtilisateur(@RequestBody DTOUtilisateur dtoUtilisateur) {
+        System.out.println("je suis dans le controller");
         DTOUtilisateur nouvelUtilisateur = SERUtil.createUtilisateur(dtoUtilisateur);
         return ResponseEntity.ok(nouvelUtilisateur);
     }

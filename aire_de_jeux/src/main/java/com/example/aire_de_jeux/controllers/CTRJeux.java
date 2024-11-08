@@ -16,8 +16,9 @@ public class CTRJeux {
     @Autowired
     private REPJeux REPJeux;
 
-    @Autowired // Ajoutez cette annotation
-    private SERJeux SERJeux; // Assurez-vous que SERJeux est également un service Spring
+
+    @Autowired
+    private SERJeux SERJeux;
 
     // Modifier un jeu
     @PutMapping("/{id}")
@@ -30,7 +31,7 @@ public class CTRJeux {
     }
 
     // Ajouter un jeu
-    @PostMapping("/jeux")
+    @PostMapping()
     public ResponseEntity<DTOJeux> addJeux(@RequestBody DTOJeux dtoJeux) {
         DTOJeux newdtoJeux = SERJeux.createJeux(dtoJeux);
         return ResponseEntity.ok(newdtoJeux);

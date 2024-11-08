@@ -17,10 +17,11 @@ import com.example.aire_de_jeux.services.SERReservation;
 @RequestMapping("/api/reservations")
 public class CTRReservation {
 
+    @Autowired
     private SERReservation serReservation;
 
     //créer une nouvelle reservation
-    @PostMapping("/reservation")
+    @PostMapping
     public ResponseEntity<DTOReservation> createReservation(@RequestBody DTOReservation dtoReservation) {
         DTOReservation createdReservation = serReservation.createReservation(dtoReservation);
         return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);    // On peut utiliser 200 Ok, mais 201 Created est plus approprié
