@@ -54,6 +54,5 @@ public class CTRJeux {
         return jeux
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 }

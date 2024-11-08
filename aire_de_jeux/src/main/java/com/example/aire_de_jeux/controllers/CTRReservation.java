@@ -47,7 +47,6 @@ public class CTRReservation {
         return serReservation.getReservationByUtilisateur(id);
     }
 
-
     //recuperer toutes les reservations d'un jeux
     @GetMapping("/jeux/{id}")
     public List<DTOReservation> getReservationByJeux(@PathVariable Integer id) {
@@ -73,13 +72,4 @@ public class CTRReservation {
             return ResponseEntity.notFound().build();
         }
     }
-    /*
-
-
-    @DeleteMapping("/{id}")
-    public void deleteReservationByIdUtilisateur(@PathVariable String id) {
-        // TODO: Implement this method
-    }
-
-    */
 }

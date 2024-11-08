@@ -43,9 +43,6 @@ public class CTRUtilisateur {
         return listeUtilisateurs;
     }
 
-
-
-
     @PostMapping
     public ResponseEntity<DTOUtilisateur> createUtilisateur(@RequestBody DTOUtilisateur dtoUtilisateur) {
         System.out.println("je suis dans le controller");

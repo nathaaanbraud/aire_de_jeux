@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface MAPUtilisateur {
-
     DTOUtilisateur toDTO(Utilisateur utilisateur);
     Utilisateur toEntity(DTOUtilisateur dtoUtilisateur);
 }
