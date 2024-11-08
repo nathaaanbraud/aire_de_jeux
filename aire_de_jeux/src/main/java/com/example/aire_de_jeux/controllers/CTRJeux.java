@@ -31,7 +31,7 @@ public class CTRJeux {
 
     // Ajouter un jeu
     @PostMapping("/jeux")
-    public ResponseEntity<DTOJeux> addUtilisateur(@RequestBody DTOJeux dtoJeux) {
+    public ResponseEntity<DTOJeux> addJeux(@RequestBody DTOJeux dtoJeux) {
         DTOJeux newdtoJeux = SERJeux.createJeux(dtoJeux);
         return ResponseEntity.ok(newdtoJeux);
     }

@@ -20,6 +20,7 @@ public class CTRReservation {
     private SERReservation serReservation;
 
     //créer une nouvelle reservation
+    @PostMapping("/reservation")
     public ResponseEntity<DTOReservation> createReservation(@RequestBody DTOReservation dtoReservation) {
         DTOReservation createdReservation = serReservation.createReservation(dtoReservation);
         return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);    // On peut utiliser 200 Ok, mais 201 Created est plus approprié
