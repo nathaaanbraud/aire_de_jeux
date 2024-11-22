@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DTOReservation {
+
     private Integer utilisateurId;
     private Integer jeuxId;
     private Integer reservation;

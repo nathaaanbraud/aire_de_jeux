@@ -42,34 +42,43 @@ public class CTRReservation {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     //recuperer toutes les reservations d'un utilisateur
-    @GetMapping("/utilisateur/{id}")
-    public List<DTOReservation> getReservationByUtilisateur(@PathVariable Integer id) {
-        return serReservation.getReservationByUtilisateur(id);
+    @GetMapping("/utilisateur/{utilisateurId}")
+    public List<DTOReservation> getReservationByUtilisateur(@PathVariable Integer utilisateurId) {
+        return serReservation.getReservationByUtilisateur(utilisateurId);
     }
 
     //recuperer toutes les reservations d'un jeux
-    @GetMapping("/jeux/{id}")
-    public List<DTOReservation> getReservationByJeux(@PathVariable Integer id) {
-        return serReservation.getReservationByJeux(id);
+    @GetMapping("/jeux/{jeuxId}")
+    public List<DTOReservation> getReservationByJeux(@PathVariable Integer jeuxId) {
+        return serReservation.getReservationByJeux(jeuxId);
     }
 
     //mettre à jour une reservation
-    @PutMapping("/{id}")
-    public ResponseEntity<DTOReservation> updateReservation(@PathVariable ReservationId id, @RequestBody DTOReservation dtoReservation) {
-        Optional<DTOReservation> updatedReservation = serReservation.updateReservation(id, dtoReservation);
+    @PutMapping("/{reservation}")
+    public ResponseEntity<DTOReservation> updateReservation(@PathVariable int reservation, @RequestBody DTOReservation dtoReservation) {
+        Optional<DTOReservation> updatedReservation = serReservation.updateReservation(reservation, dtoReservation);
         return updatedReservation
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //supprimer une reservation
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable ReservationId id) {
-        boolean isDeleted = serReservation.deleteReservation(id);
+    @DeleteMapping("/{utilisateurId}/{jeuxId}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable int utilisateurId, @PathVariable int jeuxId) {
+        boolean isDeleted = serReservation.deleteReservation(utilisateurId, jeuxId);
         if (isDeleted) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    //Enlever ou rajouter des reservations (le nombre (la quantité))
+    @PutMapping("/rajout/{nbReservations}")
+    public ResponseEntity<DTOReservation> updateNbReservation(@PathVariable int nbReservations, @RequestBody DTOReservation dtoReservation) {
+        Optional<DTOReservation> updatedReservation = serReservation.updateNbReservation(nbReservations, dtoReservation);
+        return updatedReservation
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

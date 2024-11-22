@@ -1,10 +1,14 @@
 package com.example.aire_de_jeux.services;
 
 import com.example.aire_de_jeux.dto.DTOReservation;
+import com.example.aire_de_jeux.entities.Jeux;
 import com.example.aire_de_jeux.entities.Reservation;
 import com.example.aire_de_jeux.entities.ReservationId;
+import com.example.aire_de_jeux.entities.Utilisateur;
 import com.example.aire_de_jeux.mappers.MAPReservation;
+import com.example.aire_de_jeux.repositories.REPJeux;
 import com.example.aire_de_jeux.repositories.REPReservation;
+import com.example.aire_de_jeux.repositories.REPUtilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +25,23 @@ public class SERReservation {
     @Autowired
     private MAPReservation mapReservation;
 
+    @Autowired
+    private REPJeux repJeux;
+
+    @Autowired
+    private REPUtilisateur repUtilisateur;
+
     // Création d'une nouvelle réservation
     public DTOReservation createReservation(DTOReservation dtoReservation) {
-        Reservation reservation = mapReservation.toEntity(dtoReservation);
+        Jeux jeux= repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
+        Utilisateur utilisateur = repUtilisateur.findById(dtoReservation.getUtilisateurId()).orElse(null);
+        if (jeux == null || utilisateur == null) {
+            throw new IllegalArgumentException("ID utilisateur ou ID jeux invalide");
+        }
+        else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
+            throw new IllegalArgumentException("La réservation existe déjà, veuillez utiliser la mise à jour");
+        }
+        Reservation reservation = mapReservation.toEntity(dtoReservation, jeux, utilisateur);
         Reservation savedReservation = repReservation.save(reservation);
         return mapReservation.toDTO(savedReservation);
     }
@@ -54,22 +72,39 @@ public class SERReservation {
     }
 
     // Mise à jour d'une réservation
-    public Optional<DTOReservation> updateReservation(ReservationId id, DTOReservation dtoReservation) {
-        if (repReservation.existsById(id)) {
-            Reservation reservationToUpdate = mapReservation.toEntity(dtoReservation);
-            reservationToUpdate.setId(id);
-            Reservation updatedReservation = repReservation.save(reservationToUpdate);
-            return Optional.of(mapReservation.toDTO(updatedReservation));
+    public Optional<DTOReservation> updateReservation(int reservation, DTOReservation dtoReservation) {
+        ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
+        Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
+        if (existingReservationOpt.isEmpty()) {
+            throw new IllegalArgumentException("La réservation n'existe pas");
         }
-        return Optional.empty();
+        Reservation existingReservation = existingReservationOpt.get();
+        existingReservation.setReservation(reservation);
+        Reservation updatedReservation = repReservation.save(existingReservation);
+        return Optional.of(mapReservation.toDTO(updatedReservation));
+
     }
 
     // Suppression
-    public boolean deleteReservation(ReservationId id) {
+    public boolean deleteReservation(int utilisateurId, int jeuxId) {
+        ReservationId id = new ReservationId(utilisateurId, jeuxId);
         if (repReservation.existsById(id)) {
             repReservation.deleteById(id);
             return true;
         }
         return false;
+    }
+
+    public Optional<DTOReservation> updateNbReservation(int nbReservations, DTOReservation dtoReservation) {
+        ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
+        Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
+        if (existingReservationOpt.isEmpty()) {
+            throw new IllegalArgumentException("La réservation n'existe pas");
+        }
+        Reservation existingReservation = existingReservationOpt.get();
+        existingReservation.setReservation(existingReservation.getReservation() + nbReservations);
+        Reservation updatedReservation = repReservation.save(existingReservation);
+        return Optional.of(mapReservation.toDTO(updatedReservation));
+
     }
 }

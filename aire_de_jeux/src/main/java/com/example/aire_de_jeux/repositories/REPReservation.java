@@ -7,4 +7,6 @@ import java.util.List;
 public interface REPReservation extends JpaRepository<Reservation, ReservationId> {
     List<Reservation> findByUtilisateurId(Integer utilisateurId);
     List<Reservation> findByJeuxId(Integer jeuxId);
+    boolean existsByUtilisateurIdAndJeuxId(Integer utilisateurId, Integer jeuxId);
+
 }
