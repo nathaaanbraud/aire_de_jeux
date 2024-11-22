@@ -1,6 +1,7 @@
 package com.example.aire_de_jeux.services;
 
 import com.example.aire_de_jeux.dto.DTOJeux;
+import com.example.aire_de_jeux.dto.DTOReservation;
 import com.example.aire_de_jeux.entities.Jeux;
 import com.example.aire_de_jeux.mappers.MAPJeux;
 import com.example.aire_de_jeux.repositories.REPJeux;
@@ -58,4 +59,11 @@ public class SERJeux {
         }
         return false;
     }
+
+    public List<DTOJeux> getAllReservations() {
+        return repJeux.findAll().stream()
+                .map(mapJeux::toDTO)
+                .collect(Collectors.toList());
+    }
+
 }

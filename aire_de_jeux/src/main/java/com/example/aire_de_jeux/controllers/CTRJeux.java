@@ -1,12 +1,15 @@
 package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOJeux;
+import com.example.aire_de_jeux.dto.DTOReservation;
 import com.example.aire_de_jeux.repositories.REPJeux;
 import com.example.aire_de_jeux.services.SERJeux;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -54,5 +57,11 @@ public class CTRJeux {
         return jeux
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+    @GetMapping
+    public List<DTOJeux> getAllJeux() {
+        return SERJeux.getAllReservations();
     }
 }
