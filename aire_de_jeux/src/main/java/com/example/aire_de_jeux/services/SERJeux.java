@@ -41,10 +41,9 @@ public class SERJeux {
     }
 
     // Mise à jour
-    public Optional<DTOJeux> updateJeux(Integer id, DTOJeux dtoJeux) {
-        if (repJeux.existsById(id)) {
+    public Optional<DTOJeux> updateJeux( DTOJeux dtoJeux) {
+        if (repJeux.existsById(dtoJeux.getId())) {
             Jeux jeuxToUpdate = mapJeux.toEntity(dtoJeux);
-            jeuxToUpdate.setId(id);
             Jeux updatedJeux = repJeux.save(jeuxToUpdate);
             return Optional.of(mapJeux.toDTO(updatedJeux));
         }

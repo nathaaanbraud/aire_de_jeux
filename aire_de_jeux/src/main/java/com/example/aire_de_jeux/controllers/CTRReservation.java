@@ -55,8 +55,8 @@ public class CTRReservation {
 
     //mettre à jour une reservation
     @PutMapping("/{reservation}")
-    public ResponseEntity<DTOReservation> updateReservation(@PathVariable int reservation, @RequestBody DTOReservation dtoReservation) {
-        Optional<DTOReservation> updatedReservation = serReservation.updateReservation(reservation, dtoReservation);
+    public ResponseEntity<DTOReservation> updateReservation(@RequestBody DTOReservation dtoReservation) {
+        Optional<DTOReservation> updatedReservation = serReservation.updateReservation(dtoReservation);
         return updatedReservation
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -81,4 +81,8 @@ public class CTRReservation {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
+    // potentiellement enlever une reservation avec l'id de l'utilisateur
+
 }

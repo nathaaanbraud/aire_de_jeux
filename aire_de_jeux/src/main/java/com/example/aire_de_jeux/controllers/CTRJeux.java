@@ -25,8 +25,8 @@ public class CTRJeux {
 
     // Modifier un jeu
     @PutMapping("/{id}")
-    public ResponseEntity<DTOJeux> setJeux(@PathVariable Integer id, @RequestBody DTOJeux dtoJeux) {
-        Optional<DTOJeux> updatedJeux = SERJeux.updateJeux(id, dtoJeux);
+    public ResponseEntity<DTOJeux> setJeux( @RequestBody DTOJeux dtoJeux) {
+        Optional<DTOJeux> updatedJeux = SERJeux.updateJeux( dtoJeux);
 
         return updatedJeux
                 .map(ResponseEntity::ok) // Si présent, retourne 200 OK avec le DTO mis à jour

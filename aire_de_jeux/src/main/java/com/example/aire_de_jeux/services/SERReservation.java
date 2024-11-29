@@ -72,14 +72,14 @@ public class SERReservation {
     }
 
     // Mise à jour d'une réservation
-    public Optional<DTOReservation> updateReservation(int reservation, DTOReservation dtoReservation) {
+    public Optional<DTOReservation> updateReservation(DTOReservation dtoReservation) {
         ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
         Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
         if (existingReservationOpt.isEmpty()) {
             throw new IllegalArgumentException("La réservation n'existe pas");
         }
         Reservation existingReservation = existingReservationOpt.get();
-        existingReservation.setReservation(reservation);
+        existingReservation.setReservation(dtoReservation.getReservation());
         Reservation updatedReservation = repReservation.save(existingReservation);
         return Optional.of(mapReservation.toDTO(updatedReservation));
 
