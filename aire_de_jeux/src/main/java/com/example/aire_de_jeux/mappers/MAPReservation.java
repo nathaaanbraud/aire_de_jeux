@@ -18,11 +18,6 @@ import java.util.stream.Collectors;
 
 @Mapper
 public interface MAPReservation {
-
-
-
-
-
     @Mapping(source = "id.utilisateurId", target = "utilisateurId")
     @Mapping(source = "id.jeuxId", target = "jeuxId")
     DTOReservation toDTO(Reservation reservation);
@@ -41,6 +36,4 @@ public interface MAPReservation {
 
         return reservation;
     }
-
-
 }

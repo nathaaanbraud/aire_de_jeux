@@ -41,6 +41,16 @@ public class SERReservation {
         else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
             throw new IllegalArgumentException("La réservation existe déjà, veuillez utiliser la mise à jour");
         }
+        else {
+            // Il faut vérifier que la somme des quantités de réservations déjà existantes pour le jeu
+            // + la quantité de la nouvelle réservation ne dépasse pas la quantité totale du jeu
+            int nbReservations = repReservation.findByJeuxId(dtoReservation.getJeuxId()).stream()
+                    .mapToInt(Reservation::getReservation)
+                    .sum();
+            if (nbReservations + dtoReservation.getReservation() > jeux.getQuantite()) {
+                throw new IllegalArgumentException("La quantité de réservations dépasse la quantité totale du jeu");
+            }
+        }
         Reservation reservation = mapReservation.toEntity(dtoReservation, jeux, utilisateur);
         Reservation savedReservation = repReservation.save(reservation);
         return mapReservation.toDTO(savedReservation);
