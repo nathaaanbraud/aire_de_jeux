@@ -15,14 +15,24 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Data
+
+/**
+ * Clé primaire composite pour l'entité `Reservation`.
+ * Contient les identifiants de l'utilisateur et du jeu.
+ */
 public class ReservationId implements Serializable {
 
+    /**
+     * Identifiant de l'utilisateur.
+     * Ne peut pas être nul.
+     */
     @Column(nullable = false)
     private Integer utilisateurId;
 
-    @Column (nullable = false)
+    /**
+     * Identifiant du jeu ( aire de jeu).
+     * Ne peut pas être nul.
+     */
+    @Column(nullable = false)
     private Integer jeuxId;
-
-
-
 }

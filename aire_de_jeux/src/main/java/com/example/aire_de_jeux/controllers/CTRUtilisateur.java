@@ -16,21 +16,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Contrôleur pour gérer les opérations liées aux utilisateurs.
+ * Fournit des points d'accès API pour créer, lire, mettre à jour et supprimer des utilisateurs.
+ */
 @RestController
 @RequestMapping("/api/utilisateurs")
 @RequiredArgsConstructor
 public class CTRUtilisateur {
 
+    /**
+     * Service de gestion des utilisateurs.
+     */
     final private SERUtilisateur SERUtil;
 
-    //recuperer tous les utilisateurs
+    /**
+     * Récupère tous les utilisateurs.
+     *
+     * @return une liste de tous les utilisateurs.
+     */
     @GetMapping
     public List<DTOUtilisateur> getAllUtilisateur() {
-        List<DTOUtilisateur> listeUtilisateurs = SERUtil.getAllUtilisateur();
-        return listeUtilisateurs;
+        return SERUtil.getAllUtilisateur();
     }
 
-    //recuperer un utilisateur par son id
+    /**
+     * Récupère un utilisateur par son ID.
+     *
+     * @param id l'ID de l'utilisateur à récupérer.
+     * @return une réponse HTTP contenant l'utilisateur (200 OK) ou une erreur (404 Not Found si non trouvé).
+     */
     @GetMapping("/{id}")
     public ResponseEntity<DTOUtilisateur> getUtilisateurById(@PathVariable Integer id) {
         Optional<DTOUtilisateur> utilisateur = SERUtil.getUtilisateurById(id);
@@ -38,35 +53,60 @@ public class CTRUtilisateur {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    //recuperer l'utilsateur pas son nom
+
+    /**
+     * Récupère les utilisateurs par leur nom.
+     *
+     * @param nom le nom des utilisateurs à rechercher.
+     * @return une liste d'utilisateurs correspondant au nom donné.
+     */
     @GetMapping("/nom/{nom}")
     public List<DTOUtilisateur> getUtilisateurByNom(@PathVariable String nom) {
-        List<DTOUtilisateur> listeUtilisateurs = SERUtil.getUtilisateurByNom(nom);
-        return listeUtilisateurs;
+        return SERUtil.getUtilisateurByNom(nom);
     }
 
+    /**
+     * Crée un nouvel utilisateur.
+     *
+     * @param dtoUtilisateur l'objet DTO contenant les informations de l'utilisateur à créer.
+     * @return une réponse HTTP avec l'utilisateur créé (200 OK).
+     */
     @PostMapping
     public ResponseEntity<DTOUtilisateur> createUtilisateur(@RequestBody DTOUtilisateur dtoUtilisateur) {
         DTOUtilisateur nouvelUtilisateur = SERUtil.createUtilisateur(dtoUtilisateur);
         return ResponseEntity.ok(nouvelUtilisateur);
     }
 
+    /**
+     * Met à jour un utilisateur existant par son ID.
+     *
+     * @param id             l'ID de l'utilisateur à mettre à jour.
+     * @param dtoUtilisateur l'objet DTO contenant les nouvelles informations de l'utilisateur.
+     * @return une réponse HTTP avec l'utilisateur mis à jour (200 OK) ou une erreur (404 Not Found si non trouvé).
+     */
     @PutMapping("/{id}")
     public ResponseEntity<DTOUtilisateur> updateUtilisateur(@PathVariable Integer id, @RequestBody DTOUtilisateur dtoUtilisateur) {
         Optional<DTOUtilisateur> updatedUtil = SERUtil.updateUtilisateur(id, dtoUtilisateur);
         return updatedUtil
-                .map(ResponseEntity::ok) // Si présent, retourne 200 OK avec le DTO mis à jour
-                .orElseGet(() -> ResponseEntity.notFound().build()); // Sinon, retourne 404 Not Found
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Supprime un utilisateur par son ID.
+     *
+     * @param id l'ID de l'utilisateur à supprimer.
+     * @return une réponse HTTP 204 No Content si la suppression réussit,
+     * ou 404 Not Found si l'utilisateur n'existe pas.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUtilisateur(@PathVariable Integer id) {
         boolean isDeleted = SERUtil.deleteUtilisateur(id);
 
         if (isDeleted) {
-            return ResponseEntity.noContent().build(); // 204 No Content si la suppression réussit
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found si l'ID n'existe pas
+            return ResponseEntity.notFound().build();
         }
     }
 
