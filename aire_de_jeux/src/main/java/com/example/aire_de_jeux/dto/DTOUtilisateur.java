@@ -8,10 +8,31 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DTOUtilisateur {
+    /**
+     * Data Transfer Object (DTO) pour représenter un utilisateur.
+     * Cette classe est utilisée pour transférer les données liées à un utilisateur
+     * entre les couches de l'application (contrôleur, service, etc.).
+     */
+
+    /**
+     * Identifiant unique de l'utilisateur.
+     */
     private Integer id;
+    /**
+     * Nom de l'utilisateur
+     */
     private String nom;
+    /**
+     * Prénom de l'utilisateur
+     */
     private String prenom;
+    /**
+     * Adresse mail de l'utilisateur
+     */
     private String mail;
+    /**
+     * Nom d'utilisateur (pseudo) de l'utilisateur
+     */
     private String username;
     /*
     2 options :
@@ -19,5 +40,8 @@ public class DTOUtilisateur {
     on envoie un mdp null
     - Soit on crée une deuxiemes DTO qui ne contiendrait pas d'attribut mdp
     */
+    /**
+     * Mot de passe de l'utilisateur
+     */
     private String password;
 }
