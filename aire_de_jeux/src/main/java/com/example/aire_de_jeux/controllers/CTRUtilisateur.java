@@ -1,6 +1,7 @@
 package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOJeux;
+import com.example.aire_de_jeux.dto.DTOLogin;
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
 import com.example.aire_de_jeux.mappers.MAPUtilisateur;
 import com.example.aire_de_jeux.entities.Utilisateur;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -67,5 +69,22 @@ public class CTRUtilisateur {
             return ResponseEntity.notFound().build(); // 404 Not Found si l'ID n'existe pas
         }
     }
+
+
+    // Pour se login
+    @PostMapping("/login")
+    public ResponseEntity<DTOUtilisateur> loginUtilisateur(@RequestBody DTOLogin dtoLogin) {
+        String email = dtoLogin.getMail();
+        String password = dtoLogin.getPassword();
+
+        Optional<DTOUtilisateur> utilisateur = SERUtil.loginUtilisateur(email, password);
+
+        if (utilisateur.isPresent()) {
+            return ResponseEntity.ok(utilisateur.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
 
 }
