@@ -2,6 +2,7 @@ package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOReservation;
 import com.example.aire_de_jeux.entities.ReservationId;
+import com.example.aire_de_jeux.errors.ResourceNotFoundException;
 import com.example.aire_de_jeux.services.SERReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,7 +60,7 @@ public class CTRReservation {
         Optional<DTOReservation> reservation = serReservation.getReservationById(id);
         return reservation
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation introuvable"));
     }
 
     /**
@@ -96,7 +97,7 @@ public class CTRReservation {
         Optional<DTOReservation> updatedReservation = serReservation.updateReservation(dtoReservation);
         return updatedReservation
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation introuvable"));
     }
 
     /**
@@ -113,7 +114,7 @@ public class CTRReservation {
         if (isDeleted) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Reservation introuvable");
         }
     }
 
@@ -130,6 +131,6 @@ public class CTRReservation {
         Optional<DTOReservation> updatedReservation = serReservation.updateNbReservation(nbReservations, dtoReservation);
         return updatedReservation
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation introuvable"));
     }
 }
