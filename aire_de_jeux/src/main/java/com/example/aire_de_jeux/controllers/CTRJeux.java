@@ -1,6 +1,8 @@
 package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOJeux;
+import com.example.aire_de_jeux.dto.DTOReservation;
+import com.example.aire_de_jeux.errors.ResourceNotFoundException;
 import com.example.aire_de_jeux.repositories.REPJeux;
 import com.example.aire_de_jeux.services.SERJeux;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class CTRJeux {
 
         return updatedJeux
                 .map(ResponseEntity::ok) // Si présent, retourne 200 OK avec le DTO mis à jour
-                .orElseGet(() -> ResponseEntity.notFound().build()); // Sinon, retourne 404 Not Found
+                .orElseThrow(() -> new ResourceNotFoundException("Aire de jeux introuvable")); // Sinon, retourne 404 Not Found
     }
 
     /**
@@ -66,7 +68,7 @@ public class CTRJeux {
         if (isDeleted) {
             return ResponseEntity.noContent().build(); // 204 No Content si la suppression réussit
         } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found si l'ID n'existe pas
+            throw new ResourceNotFoundException("Aire de jeux introuvable"); // 404 Not Found si l'ID n'existe pas
         }
     }
 
@@ -81,7 +83,7 @@ public class CTRJeux {
         Optional<DTOJeux> jeux = SERJeux.getJeuxById(id);
         return jeux
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Aire de jeux introuvable"));
     }
 
     /**

@@ -1,15 +1,18 @@
 package com.example.aire_de_jeux.controllers;
 
-import com.example.aire_de_jeux.dto.DTOJeux;
-import com.example.aire_de_jeux.dto.DTOLogin;
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
 import com.example.aire_de_jeux.mappers.MAPUtilisateur;
 import com.example.aire_de_jeux.entities.Utilisateur;
 import com.example.aire_de_jeux.services.*;
+import com.example.aire_de_jeux.services.SERUtilisateur;
+import com.example.aire_de_jeux.errors.ResourceNotFoundException;
+import com.example.aire_de_jeux.mappers.MAPUtilisateur;
+import com.example.aire_de_jeux.entities.Utilisateur;
+import com.example.aire_de_jeux.services.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +91,8 @@ public class CTRUtilisateur {
     public ResponseEntity<DTOUtilisateur> updateUtilisateur(@PathVariable Integer id, @RequestBody DTOUtilisateur dtoUtilisateur) {
         Optional<DTOUtilisateur> updatedUtil = SERUtil.updateUtilisateur(id, dtoUtilisateur);
         return updatedUtil
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok) // Si présent, retourne 200 OK avec le DTO mis à jour
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable") ); // Sinon, retourne 404 Not Found
     }
 
     /**
@@ -106,7 +109,7 @@ public class CTRUtilisateur {
         if (isDeleted) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Utilisateur introuvable"); // 404 Not Found si l'ID n'existe pas
         }
     }
 
