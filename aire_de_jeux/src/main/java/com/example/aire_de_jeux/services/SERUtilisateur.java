@@ -7,6 +7,7 @@ import com.example.aire_de_jeux.repositories.REPUtilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,5 +98,12 @@ public class SERUtilisateur {
             return true;
         }
         return false;
+    }
+
+    public Optional<DTOUtilisateur> loginUtilisateur(String mail, String password){
+        return repUtilisateur.findByMail(mail)
+                .filter(utilisateur -> utilisateur.getPassword().equals(password)) // Vérification du mot de passe
+                .map(mapUtilisateur::toDTO);
+                //.orElseThrow();           //todo mettre l'exception
     }
 }

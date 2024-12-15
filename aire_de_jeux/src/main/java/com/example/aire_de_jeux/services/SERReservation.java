@@ -5,6 +5,7 @@ import com.example.aire_de_jeux.entities.Jeux;
 import com.example.aire_de_jeux.entities.Reservation;
 import com.example.aire_de_jeux.entities.ReservationId;
 import com.example.aire_de_jeux.entities.Utilisateur;
+import com.example.aire_de_jeux.errors.ReservationCapacityException;
 import com.example.aire_de_jeux.mappers.MAPReservation;
 import com.example.aire_de_jeux.repositories.REPJeux;
 import com.example.aire_de_jeux.repositories.REPReservation;
@@ -55,7 +56,7 @@ public class SERReservation {
                     .mapToInt(Reservation::getReservation)
                     .sum();
             if (nbReservations + dtoReservation.getReservation() > jeux.getQuantite()) {
-                throw new IllegalArgumentException("La quantité de réservations dépasse la quantité totale du jeu");
+                throw new ReservationCapacityException("La quantité de réservations dépasse la quantité totale du jeu");
             }
         }
         Reservation reservation = mapReservation.toEntity(dtoReservation, jeux, utilisateur);
