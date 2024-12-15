@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service pour gérer les opérations liées aux réservations.
+ */
 @Service
 public class SERReservation {
 
@@ -31,19 +34,23 @@ public class SERReservation {
     @Autowired
     private REPUtilisateur repUtilisateur;
 
-    // Création d'une nouvelle réservation
+    /**
+     * Crée une nouvelle réservation.
+     *
+     * @param dtoReservation Les données de la réservation encapsulées dans un DTO.
+     * @return Le DTO de la réservation créée.
+     * @throws IllegalArgumentException Si les IDs utilisateur ou jeux sont invalides,
+     *                                  si la réservation existe déjà,
+     *                                  ou si la quantité de réservation dépasse la quantité totale disponible.
+     */
     public DTOReservation createReservation(DTOReservation dtoReservation) {
-        Jeux jeux= repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
+        Jeux jeux = repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
         Utilisateur utilisateur = repUtilisateur.findById(dtoReservation.getUtilisateurId()).orElse(null);
         if (jeux == null || utilisateur == null) {
             throw new IllegalArgumentException("ID utilisateur ou ID jeux invalide");
-        }
-        else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
+        } else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
             throw new IllegalArgumentException("La réservation existe déjà, veuillez utiliser la mise à jour");
-        }
-        else {
-            // Il faut vérifier que la somme des quantités de réservations déjà existantes pour le jeu
-            // + la quantité de la nouvelle réservation ne dépasse pas la quantité totale du jeu
+        } else {
             int nbReservations = repReservation.findByJeuxId(dtoReservation.getJeuxId()).stream()
                     .mapToInt(Reservation::getReservation)
                     .sum();
@@ -56,32 +63,58 @@ public class SERReservation {
         return mapReservation.toDTO(savedReservation);
     }
 
-    // Récupération d'une réservation par son ID composite
+    /**
+     * Récupère une réservation par son ID composite.
+     *
+     * @param id L'ID composite de la réservation (utilisateur et jeux).
+     * @return Un Optional contenant le DTO de la réservation, ou vide si elle n'existe pas.
+     */
     public Optional<DTOReservation> getReservationById(ReservationId id) {
         return repReservation.findById(id).map(mapReservation::toDTO);
     }
 
-    //Récupération de toutes les reservations correspondantes à un utilisateur
+    /**
+     * Récupère toutes les réservations d'un utilisateur donné.
+     *
+     * @param id L'identifiant de l'utilisateur.
+     * @return Une liste de DTO des réservations associées à l'utilisateur.
+     */
     public List<DTOReservation> getReservationByUtilisateur(Integer id) {
         return repReservation.findByUtilisateurId(id).stream()
                 .map(mapReservation::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List <DTOReservation> getReservationByJeux(Integer id) {
+    /**
+     * Récupère toutes les réservations associées à un jeu donné.
+     *
+     * @param id L'identifiant du jeu.
+     * @return Une liste de DTO des réservations pour ce jeu.
+     */
+    public List<DTOReservation> getReservationByJeux(Integer id) {
         return repReservation.findByJeuxId(id).stream()
                 .map(mapReservation::toDTO)
                 .collect(Collectors.toList());
     }
 
-    // Récupération de toutes les réservations
+    /**
+     * Récupère toutes les réservations.
+     *
+     * @return Une liste de DTO contenant toutes les réservations.
+     */
     public List<DTOReservation> getAllReservations() {
         return repReservation.findAll().stream()
                 .map(mapReservation::toDTO)
                 .collect(Collectors.toList());
     }
 
-    // Mise à jour d'une réservation
+    /**
+     * Met à jour une réservation existante.
+     *
+     * @param dtoReservation Les nouvelles données de la réservation encapsulées dans un DTO.
+     * @return Un Optional contenant le DTO de la réservation mise à jour, ou vide si elle n'existe pas.
+     * @throws IllegalArgumentException Si la réservation n'existe pas.
+     */
     public Optional<DTOReservation> updateReservation(DTOReservation dtoReservation) {
         ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
         Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
@@ -92,10 +125,15 @@ public class SERReservation {
         existingReservation.setReservation(dtoReservation.getReservation());
         Reservation updatedReservation = repReservation.save(existingReservation);
         return Optional.of(mapReservation.toDTO(updatedReservation));
-
     }
 
-    // Suppression
+    /**
+     * Supprime une réservation par son ID composite.
+     *
+     * @param utilisateurId L'identifiant de l'utilisateur.
+     * @param jeuxId        L'identifiant du jeu.
+     * @return true si la réservation a été supprimée, false sinon.
+     */
     public boolean deleteReservation(int utilisateurId, int jeuxId) {
         ReservationId id = new ReservationId(utilisateurId, jeuxId);
         if (repReservation.existsById(id)) {
@@ -105,6 +143,14 @@ public class SERReservation {
         return false;
     }
 
+    /**
+     * Met à jour le nombre de réservations pour une réservation existante.
+     *
+     * @param nbReservations Le nombre de réservations à ajouter.
+     * @param dtoReservation Les données de la réservation à mettre à jour.
+     * @return Un Optional contenant le DTO de la réservation mise à jour, ou vide si elle n'existe pas.
+     * @throws IllegalArgumentException Si la réservation n'existe pas.
+     */
     public Optional<DTOReservation> updateNbReservation(int nbReservations, DTOReservation dtoReservation) {
         ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
         Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
@@ -115,6 +161,5 @@ public class SERReservation {
         existingReservation.setReservation(existingReservation.getReservation() + nbReservations);
         Reservation updatedReservation = repReservation.save(existingReservation);
         return Optional.of(mapReservation.toDTO(updatedReservation));
-
     }
 }
