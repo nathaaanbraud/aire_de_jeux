@@ -68,7 +68,6 @@ public class SERUtilisateur {
     }
 
     public Optional<DTOUtilisateur> loginUtilisateur(String mail, String password){
-        System.out.print("OHJAHOAJHOAAAAAAAAAAAAAAAAAAOAJHOAJHAJHAO");
         return repUtilisateur.findByMail(mail)
                 .filter(utilisateur -> utilisateur.getPassword().equals(password)) // Vérification du mot de passe
                 .map(mapUtilisateur::toDTO);

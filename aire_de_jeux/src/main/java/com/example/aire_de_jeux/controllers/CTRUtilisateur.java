@@ -1,6 +1,7 @@
 package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
+import com.example.aire_de_jeux.dto.DTOLogin;
 import com.example.aire_de_jeux.mappers.MAPUtilisateur;
 import com.example.aire_de_jeux.entities.Utilisateur;
 import com.example.aire_de_jeux.services.*;
@@ -10,6 +11,7 @@ import com.example.aire_de_jeux.mappers.MAPUtilisateur;
 import com.example.aire_de_jeux.entities.Utilisateur;
 import com.example.aire_de_jeux.services.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
@@ -122,11 +124,7 @@ public class CTRUtilisateur {
 
         Optional<DTOUtilisateur> utilisateur = SERUtil.loginUtilisateur(email, password);
 
-        if (utilisateur.isPresent()) {
-            return ResponseEntity.ok(utilisateur.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+        return utilisateur.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
     }
 
 
