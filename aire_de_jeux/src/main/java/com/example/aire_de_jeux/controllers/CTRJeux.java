@@ -1,10 +1,10 @@
 package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOJeux;
-import com.example.aire_de_jeux.dto.DTOReservation;
 import com.example.aire_de_jeux.errors.ResourceNotFoundException;
 import com.example.aire_de_jeux.repositories.REPJeux;
 import com.example.aire_de_jeux.services.SERJeux;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +21,9 @@ import java.util.Optional;
 @RequestMapping("/api/jeux")
 public class CTRJeux {
 
-    @Autowired
-    private REPJeux REPJeux;
-
+    /**
+     * Service de gestion des jeux.
+     */
     @Autowired
     private SERJeux SERJeux;
 

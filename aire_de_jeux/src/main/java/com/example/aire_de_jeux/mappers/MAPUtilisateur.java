@@ -2,13 +2,14 @@ package com.example.aire_de_jeux.mappers;
 
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
 import com.example.aire_de_jeux.entities.Utilisateur;
+
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+
 /**
  * Interface de mappage pour l'entité `Utilisateur` et son DTO associé `DTOUtilisateur`.
  * Utilise MapStruct pour convertir les entités `Utilisateur` en `DTOUtilisateur` et inversement.
- *
  * Cette interface gère également des opérations après le mappage, comme la suppression du mot de passe dans le DTO.
  */
 @Mapper

@@ -3,25 +3,19 @@ package com.example.aire_de_jeux.mappers;
 import com.example.aire_de_jeux.dto.DTOReservation;
 import com.example.aire_de_jeux.entities.Reservation;
 import com.example.aire_de_jeux.entities.ReservationId;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-import com.example.aire_de_jeux.services.SERJeux;
-import com.example.aire_de_jeux.services.SERUtilisateur;
 import com.example.aire_de_jeux.entities.Jeux;
 import com.example.aire_de_jeux.entities.Utilisateur;
-import com.example.aire_de_jeux.repositories.REPJeux;
-import com.example.aire_de_jeux.repositories.REPUtilisateur;
 
-import java.util.stream.Collectors;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper
 /**
  * Interface de mappage pour l'entité `Reservation` et son DTO associé `DTOReservation`.
  * Utilise MapStruct pour convertir les entités `Reservation` en `DTOReservation` et inversement.
  */
+@Mapper
 public interface MAPReservation {
+
     /**
      * Convertit une entité `Reservation` en un objet `DTOReservation`.
      * Les identifiants `utilisateurId` et `jeuxId` de la clé primaire composite sont extraits de l'objet `ReservationId`.
@@ -42,7 +36,7 @@ public interface MAPReservation {
      * @param utilisateur l'entité `Utilisateur` associée à la réservation.
      * @return l'entité `Reservation` correspondant à l'objet `DTOReservation`.
      */
-    public default Reservation toEntity(DTOReservation dtoReservation, Jeux jeux, Utilisateur utilisateur) {
+    default Reservation toEntity(DTOReservation dtoReservation, Jeux jeux, Utilisateur utilisateur) {
         if (dtoReservation == null) {
             return null;
         }

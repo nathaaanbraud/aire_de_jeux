@@ -4,10 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * Data Transfer Object (DTO) pour représenter une réservation.
  * Cette classe est utilisée pour transférer les données liées à une réservation

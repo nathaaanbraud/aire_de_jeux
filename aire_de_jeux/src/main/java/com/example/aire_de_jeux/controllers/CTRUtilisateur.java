@@ -2,23 +2,15 @@ package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
 import com.example.aire_de_jeux.dto.DTOLogin;
-import com.example.aire_de_jeux.mappers.MAPUtilisateur;
-import com.example.aire_de_jeux.entities.Utilisateur;
-import com.example.aire_de_jeux.services.*;
 import com.example.aire_de_jeux.services.SERUtilisateur;
 import com.example.aire_de_jeux.errors.ResourceNotFoundException;
-import com.example.aire_de_jeux.mappers.MAPUtilisateur;
-import com.example.aire_de_jeux.entities.Utilisateur;
-import com.example.aire_de_jeux.services.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.ResourceAccessException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -115,8 +107,12 @@ public class CTRUtilisateur {
         }
     }
 
-
-    // Pour se login
+    /**
+     * Permet à un utilisateur de se connecter.
+     *
+     * @param dtoLogin Les informations de connexion de l'utilisateur.
+     * @return Une réponse HTTP contenant le DTO de l'utilisateur connecté (200 OK) ou une erreur (401 Unauthorized si non trouvé).
+     */
     @PostMapping("/login")
     public ResponseEntity<DTOUtilisateur> loginUtilisateur(@RequestBody DTOLogin dtoLogin) {
         String email = dtoLogin.getMail();
@@ -126,6 +122,4 @@ public class CTRUtilisateur {
 
         return utilisateur.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
     }
-
-
 }

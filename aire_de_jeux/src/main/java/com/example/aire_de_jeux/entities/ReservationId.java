@@ -6,20 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.Serializable;
-
-@Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-@Data
 
 /**
  * Clé primaire composite pour l'entité `Reservation`.
  * Contient les identifiants de l'utilisateur et du jeu.
  */
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@Data
 public class ReservationId implements Serializable {
 
     /**
