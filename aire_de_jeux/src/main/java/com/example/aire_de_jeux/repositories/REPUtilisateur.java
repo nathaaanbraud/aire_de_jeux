@@ -19,6 +19,13 @@ public interface REPUtilisateur extends JpaRepository<Utilisateur, Integer> {
      * @return une liste d'utilisateurs correspondant au nom fourni.
      */
     List<Utilisateur> findByNom(String nom);
+
+    /**
+     * Trouve un utilisateur par son adresse mail.
+     *
+     * @param mail l'adresse mail de l'utilisateur.
+     * @return un Optional contenant l'utilisateur, ou vide si l'utilisateur n'existe pas.
+     */
     Optional<Utilisateur> findByMail(String mail);
 
     /**
