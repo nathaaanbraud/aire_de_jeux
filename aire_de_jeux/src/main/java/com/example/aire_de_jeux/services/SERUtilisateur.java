@@ -31,6 +31,11 @@ public class SERUtilisateur {
      * @return Le DTO de l'utilisateur créé.
      */
     public DTOUtilisateur createUtilisateur(DTOUtilisateur dtoUtilisateur) {
+
+        if (repUtilisateur.existsByMail(dtoUtilisateur.getMail())) {
+            throw new IllegalArgumentException("L'addresse mail renseignée est déjà utilisée");
+        }
+
         Utilisateur utilisateur = mapUtilisateur.toEntity(dtoUtilisateur);
         Utilisateur savedUtilisateur = repUtilisateur.save(utilisateur);
         return mapUtilisateur.toDTO(savedUtilisateur);
