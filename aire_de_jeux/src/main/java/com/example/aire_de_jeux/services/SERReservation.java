@@ -6,6 +6,7 @@ import com.example.aire_de_jeux.entities.Reservation;
 import com.example.aire_de_jeux.entities.ReservationId;
 import com.example.aire_de_jeux.entities.Utilisateur;
 import com.example.aire_de_jeux.errors.ReservationCapacityException;
+import com.example.aire_de_jeux.errors.ResourceNotFoundException;
 import com.example.aire_de_jeux.mappers.MAPReservation;
 import com.example.aire_de_jeux.repositories.REPJeux;
 import com.example.aire_de_jeux.repositories.REPReservation;
@@ -46,13 +47,19 @@ public class SERReservation {
      *                                  ou si la quantité de réservation dépasse la quantité totale disponible.
      */
     public DTOReservation createReservation(DTOReservation dtoReservation) {
-        Jeux jeux = repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
+        Jeux jeux= repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
         Utilisateur utilisateur = repUtilisateur.findById(dtoReservation.getUtilisateurId()).orElse(null);
         if (jeux == null || utilisateur == null) {
             throw new IllegalArgumentException("ID utilisateur ou ID jeux invalide");
-        } else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
+        }
+        else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
             throw new IllegalArgumentException("La réservation existe déjà, veuillez utiliser la mise à jour");
-        } else {
+        }
+        else {
+            if (dtoReservation.getReservation() < 1) {
+                throw new IllegalArgumentException("La quantité de réservations ne peut pas être inférieure à 1");
+            }
+
             int nbReservations = repReservation.findByJeuxId(dtoReservation.getJeuxId()).stream()
                     .mapToInt(Reservation::getReservation)
                     .sum();
@@ -121,12 +128,24 @@ public class SERReservation {
         ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
         Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
         if (existingReservationOpt.isEmpty()) {
-            throw new IllegalArgumentException("La réservation n'existe pas");
+            throw new ResourceNotFoundException("La réservation n'existe pas");
         }
+        Jeux jeux = repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
+        if (jeux == null) {
+            throw new ResourceNotFoundException("Jeux introuvable");
+        }
+        int nbReservations = repReservation.findByJeuxId(dtoReservation.getJeuxId()).stream()
+                .mapToInt(Reservation::getReservation)
+                .sum();
+        if (nbReservations + dtoReservation.getReservation() > jeux.getQuantite()) {
+            throw new ReservationCapacityException("La quantité de réservations dépasse la quantité totale du jeu");
+        }
+
         Reservation existingReservation = existingReservationOpt.get();
         existingReservation.setReservation(dtoReservation.getReservation());
         Reservation updatedReservation = repReservation.save(existingReservation);
         return Optional.of(mapReservation.toDTO(updatedReservation));
+
     }
 
     /**
@@ -148,19 +167,38 @@ public class SERReservation {
     /**
      * Met à jour le nombre de réservations pour une réservation existante.
      *
-     * @param nbReservations Le nombre de réservations à ajouter.
+     * @param nbUpdatedReservations Le nombre de réservations à ajouter.
      * @param dtoReservation Les données de la réservation à mettre à jour.
      * @return Un Optional contenant le DTO de la réservation mise à jour, ou vide si elle n'existe pas.
      * @throws IllegalArgumentException Si la réservation n'existe pas.
      */
-    public Optional<DTOReservation> updateNbReservation(int nbReservations, DTOReservation dtoReservation) {
+    public Optional<DTOReservation> updateNbReservation(int nbUpdatedReservations, DTOReservation dtoReservation) {
         ReservationId reservationId = new ReservationId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId());
         Optional<Reservation> existingReservationOpt = repReservation.findById(reservationId);
+
+        Jeux jeux = repJeux.findById(dtoReservation.getJeuxId()).orElse(null);
+        if (jeux == null) {
+            throw new ResourceNotFoundException("Jeux introuvable");
+        }
+
         if (existingReservationOpt.isEmpty()) {
             throw new IllegalArgumentException("La réservation n'existe pas");
         }
+
+        int nbReservation = repReservation.findByJeuxId(dtoReservation.getJeuxId()).stream()
+                .mapToInt(Reservation::getReservation)
+                .sum();
+
+        if (nbUpdatedReservations < 0 && dtoReservation.getReservation() + nbUpdatedReservations < 1) {
+            throw new IllegalArgumentException("La quantité de réservations ne peut pas être négative ou nulle");
+        }
+
+        if (nbReservation + nbUpdatedReservations > jeux.getQuantite()) {
+            throw new ReservationCapacityException("La quantité de réservations dépasse la quantité totale du jeu");
+        }
+
         Reservation existingReservation = existingReservationOpt.get();
-        existingReservation.setReservation(existingReservation.getReservation() + nbReservations);
+        existingReservation.setReservation(existingReservation.getReservation() + nbUpdatedReservations);
         Reservation updatedReservation = repReservation.save(existingReservation);
         return Optional.of(mapReservation.toDTO(updatedReservation));
     }

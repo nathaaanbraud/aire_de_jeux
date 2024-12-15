@@ -93,7 +93,7 @@ public class CTRReservation {
      * @return une réponse HTTP avec la réservation mise à jour (200 OK)
      * ou une réponse 404 Not Found si la réservation n'existe pas.
      */
-    @PutMapping("/{reservation}")
+    @PutMapping
     public ResponseEntity<DTOReservation> updateReservation(@RequestBody DTOReservation dtoReservation) {
         Optional<DTOReservation> updatedReservation = serReservation.updateReservation(dtoReservation);
         return updatedReservation
