@@ -1,6 +1,7 @@
 package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.errors.APIError;
+import com.example.aire_de_jeux.errors.AuthentificationException;
 import com.example.aire_de_jeux.errors.ReservationCapacityException;
 import com.example.aire_de_jeux.errors.ResourceNotFoundException;
 
@@ -48,7 +49,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIError> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
         APIError error = new APIError(
                 HttpStatus.BAD_REQUEST.value(),
-                "Illegal Argument: " + ex.getMessage(),
+                ex.getMessage(),
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -65,10 +66,27 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIError> handleReservationCapacityException(ReservationCapacityException ex, HttpServletRequest request) {
         APIError error = new APIError(
                 HttpStatus.BAD_REQUEST.value(),
-                "Capacity issue: " + ex.getMessage(),
+                ex.getMessage(),
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    /**
+     * Intercepte les exceptions AuthentificationException et renvoie une réponse HTTP appropriée.
+     *
+     * @param ex l'exception interceptée
+     * @param request la requête HTTP
+     * @return une réponse HTTP avec le code d'erreur et le message d'erreur
+     */
+    @ExceptionHandler(AuthentificationException.class)
+    public ResponseEntity<APIError> handleAuthentificationException(AuthentificationException ex, HttpServletRequest request) {
+        APIError error = new APIError(
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     /**
@@ -82,7 +100,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIError> handleGeneralException(Exception ex, HttpServletRequest request) {
         APIError error = new APIError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error: " + ex.getMessage(),
+                ex.getMessage(),
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);

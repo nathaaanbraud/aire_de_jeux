@@ -2,6 +2,7 @@ package com.example.aire_de_jeux.controllers;
 
 import com.example.aire_de_jeux.dto.DTOUtilisateur;
 import com.example.aire_de_jeux.dto.DTOLogin;
+import com.example.aire_de_jeux.errors.AuthentificationException;
 import com.example.aire_de_jeux.services.SERUtilisateur;
 import com.example.aire_de_jeux.errors.ResourceNotFoundException;
 
@@ -48,7 +49,7 @@ public class CTRUtilisateur {
         Optional<DTOUtilisateur> utilisateur = SERUtil.getUtilisateurById(id);
         return utilisateur
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable"));
     }
 
     /**
@@ -120,6 +121,6 @@ public class CTRUtilisateur {
 
         Optional<DTOUtilisateur> utilisateur = SERUtil.loginUtilisateur(email, password);
 
-        return utilisateur.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null));
+        return utilisateur.map(ResponseEntity::ok).orElseThrow(() -> new AuthentificationException("Email ou mot de passe incorrect"));
     }
 }
