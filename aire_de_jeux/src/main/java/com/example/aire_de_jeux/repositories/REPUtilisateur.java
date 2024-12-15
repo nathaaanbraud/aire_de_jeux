@@ -18,4 +18,12 @@ public interface REPUtilisateur extends JpaRepository<Utilisateur, Integer> {
      */
     List<Utilisateur> findByNom(String nom);
     Optional<Utilisateur> findByMail(String mail);
+
+    /**
+     * Vérifie si un utilisateur existe pour une adresse mail spécifique.
+     *
+     * @param mail l'adresse mail de l'utilisateur.
+     * @return true si l'utilisateur existe, sinon false.
+     */
+    boolean existsByMail(String mail);
 }
