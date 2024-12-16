@@ -53,7 +53,7 @@ public class SERReservation {
             throw new IllegalArgumentException("ID utilisateur ou ID jeux invalide");
         }
         else if (repReservation.existsByUtilisateurIdAndJeuxId(dtoReservation.getUtilisateurId(), dtoReservation.getJeuxId())) {
-            throw new IllegalArgumentException("La réservation existe déjà, veuillez utiliser la mise à jour");
+            throw new IllegalArgumentException("La réservation existe déjà, veuillez mettre à jour la réservation existante");
         }
         else {
             if (dtoReservation.getReservation() < 1) {
