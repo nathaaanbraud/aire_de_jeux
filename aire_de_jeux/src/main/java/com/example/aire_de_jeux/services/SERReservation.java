@@ -190,7 +190,7 @@ public class SERReservation {
                 .sum();
 
         if (nbUpdatedReservations < 0 && dtoReservation.getReservation() + nbUpdatedReservations < 1) {
-            throw new IllegalArgumentException("La quantité de réservations ne peut pas être négative ou nulle");
+            throw new IllegalArgumentException("La quantité de réservations ne peut pas être inférieure à 1");
         }
 
         if (nbReservation + nbUpdatedReservations > jeux.getQuantite()) {
