@@ -156,9 +156,8 @@ public class SERReservation {
      * @return true si la réservation a été supprimée, false sinon.
      */
     public boolean deleteReservation(int utilisateurId, int jeuxId) {
-        ReservationId id = new ReservationId(utilisateurId, jeuxId);
-        if (repReservation.existsById(id)) {
-            repReservation.deleteById(id);
+        if (repReservation.existsByUtilisateurIdAndJeuxId(utilisateurId, jeuxId)) {
+            repReservation.deleteByUtilisateurIdAndJeuxId(utilisateurId, jeuxId);
             return true;
         }
         return false;

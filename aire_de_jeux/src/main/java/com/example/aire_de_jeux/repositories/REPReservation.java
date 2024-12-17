@@ -36,4 +36,11 @@ public interface REPReservation extends JpaRepository<Reservation, ReservationId
      * @return true si la réservation existe, sinon false.
      */
     boolean existsByUtilisateurIdAndJeuxId(Integer utilisateurId, Integer jeuxId);
+
+    /**
+     * Supprime une réservation par son ID composite.
+     * @param utilisateurId l'ID de l'utilisateur.
+     * @param jeuxId l'ID du jeu.
+     */
+    void deleteByUtilisateurIdAndJeuxId(Integer utilisateurId, Integer jeuxId);
 }
