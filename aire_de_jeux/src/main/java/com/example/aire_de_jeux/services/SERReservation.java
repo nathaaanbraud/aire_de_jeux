@@ -14,6 +14,7 @@ import com.example.aire_de_jeux.repositories.REPUtilisateur;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -149,21 +150,6 @@ public class SERReservation {
     }
 
     /**
-     * Supprime une réservation par son ID composite.
-     *
-     * @param utilisateurId L'identifiant de l'utilisateur.
-     * @param jeuxId        L'identifiant du jeu.
-     * @return true si la réservation a été supprimée, false sinon.
-     */
-    public boolean deleteReservation(int utilisateurId, int jeuxId) {
-        if (repReservation.existsByUtilisateurIdAndJeuxId(utilisateurId, jeuxId)) {
-            repReservation.deleteByUtilisateurIdAndJeuxId(utilisateurId, jeuxId);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Met à jour le nombre de réservations pour une réservation existante.
      *
      * @param nbUpdatedReservations Le nombre de réservations à ajouter.
@@ -200,5 +186,21 @@ public class SERReservation {
         existingReservation.setReservation(existingReservation.getReservation() + nbUpdatedReservations);
         Reservation updatedReservation = repReservation.save(existingReservation);
         return Optional.of(mapReservation.toDTO(updatedReservation));
+    }
+
+    /**
+     * Supprime une réservation par son ID composite.
+     *
+     * @param utilisateurId L'identifiant de l'utilisateur.
+     * @param jeuxId        L'identifiant du jeu.
+     * @return true si la réservation a été supprimée, false sinon.
+     */
+    @Transactional
+    public boolean deleteReservation(int utilisateurId, int jeuxId) {
+        if (repReservation.existsByUtilisateurIdAndJeuxId(utilisateurId, jeuxId)) {
+            repReservation.deleteByUtilisateurIdAndJeuxId(utilisateurId, jeuxId);
+            return true;
+        }
+        return false;
     }
 }
